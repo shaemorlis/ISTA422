@@ -1,0 +1,29 @@
+Shae Morlis
+TSQL HW10
+
+1. What is the purpose of transactions? Why do we use transactions in SQL scripts?
+A transaction is a unit of work that might include multiple activities that query and modify data and that can also change the data definition.
+
+2. Briefly describe each of the ACID properties.
+Atomicity A transaction is an atomic unit of work. Either all changes in the transaction take place or none do.
+Consistency The term consistency refers to the state of the data that the relational database management system (RDBMS) gives you access to as concurrent transactions modify and query it.
+Isolation Isolation ensures that transactions access only consistent data. You control what consistency means to your transactions through a mechanism called isolation levels.
+Durability Data changes are always written to the database’s transaction log on disk before they are written to the data portion of the database on disk.
+3. What do we mean when we talk about the granularity of locks?
+To obtain a lock on a certain resource type, your transaction must first obtain intent locks of the same mode on higher levels of granularity
+4. What do we mean when we talk about the modes of locks?
+As you start learning about transactions and concurrency, you should first familiarize yourself with two main lock modes: exclusive and shared.
+Exclusive locks are called “exclusive” because you cannot obtain an exclusive lock on a resource if another transaction is holding any lock mode on the resource, and no lock mode can be obtained on a resource if another transaction is holding an exclusive lock on the resource.
+5. In your ownh words, describe blocking, and give an example.
+Blocking is normal in a system as long as requests are satisfied within a reasonable amount of time. However, if some requests end up waiting too long, you might need to troubleshoot the blocking situation and see whether you can do something to prevent such long latencies. 
+6. What are the properties of locks? That is, list the column name and column type of the Fields in sys.dm tran locks.
+Request mode, Granted exclusive, Granted Shared, Granted Intent Exclusive, Granted Intent Shared 
+7. What are the properties of sessions? That is, list the column name and column type of the Fieldselds in sys.dm exec connections.
+8. What are the requests of sessions? That is, list the column name and column type of the Fields in
+sys.dm exec requests.
+9. What is an isolation level? Give an example of the operation of an isolation level.
+Isolation levels determine the level of consistency you get when you interact with data. In the default isolation level in a box product, a reader uses shared locks on the target resources and a writer uses exclusive locks. 
+10. (Not in the book.) What do we mean when we say that an object is serializable?
+To serialize an object means to convert its state to a byte stream so that the byte stream can be reverted back into a copy of the object.
+11. What is an deadlock? Give an example of a deadlock?
+A set of processes or threads is deadlocked when each process or thread is waiting for a resource to be freed which is controlled by another process. Both threads are blocked; each is waiting for an event which will never occur. Traffic gridlock is an everyday example of a deadlock situation.

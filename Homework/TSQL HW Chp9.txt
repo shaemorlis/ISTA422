@@ -1,0 +1,57 @@
+Name: Shae Morlis
+File: TSQL-09
+
+1. What is a temporal table?
+Tables that are created by SQL to track changes, updates, etc while you work on the current data. 
+
+
+2. Under what circumstances would you use a temporal table? Temporal tables are in widespread use in
+certain kinds of businesses.
+Data auditing - transactions
+Data analysis - (Over the event of a time period)
+
+
+3. What are the semantics of a temporal table? There are seven of them.
+
+A primary key
+Two columns defined as DATETIME2 with any precision, which are non-nullable and represent the start and end of the row’s validity period in the UTC time zone 
+A start column that should be marked with the option GENERATED ALWAYS AS ROW START 
+An end column that should be marked with the option GENERATED ALWAYS AS ROW END 
+A designation of the period columns with the option PERIOD FOR SYSTEM_TIME (<startcol>, <endcol>)
+ The table option SYSTEM_VERSIONING, which should be set to ON 
+ A linked history table (which SQL Server can create for you) to hold the past states of modified rows
+
+CREATE TABLE dbo.Employees
+( empid INT NOT NULL 
+CONSTRAINT PK_Employees PRIMARY KEY NONCLUSTERED,
+empname VARCHAR(25) NOT NULL, department VARCHAR(50) NOT NULL, salary NUMERIC(10, 2) NOT NULL, sysstart DATETIME2(0) GENERATED ALWAYS AS ROW START HIDDEN NOT NULL, sysend DATETIME2(0) GENERATED ALWAYS AS ROW END HIDDEN NOT NULL, PERIOD FOR SYSTEM_TIME (sysstart, sysend), INDEX ix_Employees CLUSTERED(empid, sysstart, sysend) ) WITH ( SYSTEM_VERSIONING = ON ( HISTORY_TABLE = dbo.EmployeesHistory ) );
+
+
+4. How do you search a history table?
+Select the obj name of the history table from the sys.tables then specify the naming convention. 
+
+SELECT
+    OBJECT_NAME(history_table_id) AS 'History Table'
+FROM sys.tables
+WHERE name = 'People'
+GO
+
+
+5. How do you modify a history tablre?
+Insert into the current table and note the timestamp as it will be reflected in the temporal table. 
+
+
+6. How do you delete date from a history table? Why would you want to delete data from a history table?
+
+
+7. How do you search a history table?
+Add the FOR SYSTEM TIME clause to your normal query.
+
+
+8. How do you query all data from both a history file and the current data?
+SELECT * FROM dbo.namehere;
+SELECT * FROM dbo.namehereHistory;
+
+
+9. How do you drop a temporal table?
+You cannot simply DROP table. You will need to ALTER the table and turn OFF the SYSTEM_VERSONING then drop the table.

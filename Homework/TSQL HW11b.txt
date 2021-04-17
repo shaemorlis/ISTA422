@@ -1,0 +1,101 @@
+Name: Shae Morlis
+File: TSQL 11b
+Date: April 13th, 2021
+
+
+1. What is dynamic SQL?
+
+constructing a batch of T-SQL code as a character string and then executing that batch.
+
+
+2. In executing dynamic SQL, what are the differences between using the EXEC command and the sp execute sp stored procedure?
+
+-The EXEC command accepts a character string in parentheses as input and executes the batch of code within the character string. EXEC supports both regular and Unicode character strings as input. This command can also be used to execute a stored procedure
+
+-The sp_executesql - has an interface; that is, it supports input and output parameters. The sp_executesql stored procedure can perform better than EXEC because its parameterization aids in reusing cached execution plans. An execution plan is the physical processing plan SQL Server produces for a query, with the set of instructions describing which objects to access, in what order, which indexes to use, how to access them, which join algorithms to use, and so on.
+
+
+3. What is a SQL injection attack? Give an example of an attack.
+
+When an outside source (hacker) inject (or inputs) code that you did not want to run. An example would be when a hacker injects code within your cancatenations. 
+
+
+4. How do you execute the EXEC command? Write a complete example using the TSQLV4 database.
+
+Using TSQLV4;
+
+DECLARE @sql AS VARCHAR(100); 
+SET @sql = 'PRINT ''This message was printed by a dynamic SQL batch.'';'; 
+EXEC(@sql);
+
+
+5. Describe the use of input parameters and output parameters for the sp executesql stored procedure.
+
+parameters that appear in the code cannot be considered part of the code—they can only be considered operands in expressions. So, by using parameters, you can eliminate your exposure to SQL injection.
+
+parameterization aids in reusing cached execution plans.
+
+
+6. What are the three kinds of routines that T-SQL recognizes?
+
+user-defined functions, stored procedures, and triggers.
+
+7. What is the difference between a stored procedure, a user defined function, and a trigger?
+
+user defined- The purpose of a user-defined function (UDF) is to encapsulate logic that calculates something, possibly based on input parameters, and return a result.
+
+Stored procedures- are routines that encapsulate code. They can have input and output parameters, they can return result sets of queries, and they are allowed to have side effects. Not only can you modify data through stored procedures, you can also apply schema changes through them.
+
+Triggers- special kind of stored procedure—one that cannot be executed explicitly. Instead, it’s attached to an event
+
+
+
+8. What is the primary function of a UDF? This is not specifically stated in the book but is clear fro the
+context of the discussion n the book.
+
+Encapsulation. ALlowing the user to define the values being calculated.
+
+
+9. (Not in book.) What are side effects, and why are they dangerous?
+
+permanent changes to the state of a resource that has a scope outside the function
+
+
+10. What is the principle distinction between a UDF and a stored procedure?
+UDF can be used in the SQL statements anywhere in the WHERE/HAVING/SELECT section where as Stored procedures cannot be.
+
+
+11. Given that you cannot execute a trigger explicitly, what is the advantage of using triggers?
+
+It helps in maintaining the track of all the changes (update, deletion and insertion) occurs in the tables through inserting the changes values in the audits tables.
+
+
+12. In using error handling in T-SQL, can you mimic a finally block? If so, how?
+
+Utilizing a TRY...CATCH funtion which will perform the same approach. 
+BEGIN TRY  
+     --code to try 
+END TRY  
+BEGIN CATCH  
+     --code to run if an error occurs
+--is generated in try
+END CATCH
+
+13. Write a user defined function that returns a Booleans as to whether a customer may purchase alcohol
+as of the instant that the function runs.
+
+CREATE TABLE testbool (
+  alcohol purchase VARCHAR2(10),
+  is_checked NUMBER(1)
+);
+
+14. Write a trigger that places a customer in the OFF LIMITS table if he attempt to purchase alcohol
+when he is underage.
+
+
+15. Write a stored procedure that deletes customers from the OFF LIMITS table when they have reached
+their 21st birthday.
+CREATE PROCEDURE SelectAllCustomers
+AS
+SELECT * FROM Customers
+GO;

@@ -1,0 +1,54 @@
+Shae Morlis
+TSQL HW 
+
+1. Why do we use variables in T-SQL? How do you declare and initialize T-SQL variables? Can you
+declare and initialize a variable in a single step?
+A Transact-SQL local variable is an object that can hold a single data value of a specific type. 
+The DECLARE statement is used to declare a variable in SQL Server. Initialization is an optional thing while declaring. By default, DECLARE initializes variable to NULL. Using the keyword 'AS' is optional. To declare more than one local variable, use a comma after the first local variable definition, and then define the next local variable name and data type
+2. Why is the assignment SET method for setting a variable safer than the assignment SELECT method?
+The SET statement is safer than the assignment SELECT because it requires you to use a scalar subquery to pull data from a table.
+
+3. Describe what is meant by a batch file in T-SQL? What is the difference between batches and trans-
+actions?
+In Transact-SQL, a batch is a set of SQL statements submitted together and executed as a group, one after the other. Batches can be stored in command files.
+
+4. Can a transaction be split between multiple batches? Can a batch be split between multiple transac-
+tions? Explain.
+A batch can have multiple transactions, and a transaction can be submitted in parts as multiple batches.
+5. What is meant when the book says that “a batch is a unit of resolution?” Explain binding.
+This means that checking the existence of objects and columns happens at the batch level.
+
+6. What is the scope of variables with respect to T-SQL batches?
+A variable is local to the batch in which it’s defined.
+
+7. Give a practical example of the use of the GO n operator that is not in the book.
+denote the end of a batch; INSERT INTO dbo.T1 DEFAULT VALUES; GO 100 SELECT * FROM dbo.T1;
+
+8. How to you delimit if ...else constructions that contain multiple statements?
+
+9. Does T-SQL provide a SWITCH ...CASE type of construct? See chapter 2 if you don't recall. If it
+exists, is it interchangeable with the if ...else construct?
+
+10. What is the difference between a relation and a cursor?
+A relation is another name for a table. The language often used in academic research papers etc. is relations and tuples, where as in industry most people refer to these as tables and rows.
+
+A curser is used to retrieve results as described above, but is generally used in a programming environment when you need to do something that the SQL syntax alone is not well suited to e.g. in Oracle you use cursors in pl/sql procedures.
+
+11. What are the specific steps to use a cursor? List the steps.
+In the cursor execution, we have two steps. Step one, the positioning, when the cursor sets its position to a row from the result set. Step two, the retrieval, when it gets the data from that specific row in an operation called the FETCH.
+
+12. What is the scope of a local temporary table?
+Scope of the Local Temporary Table is the session in which it is created and they are dropped automatically once the session ends and we can also drop them explicitly. If a Temporary Table is created within a batch, then it can be accessed within the next batch of the same session.
+
+13. When are global temporary tables destroyed? What is the main difference between local temporary
+tables and global temporary tables?
+Global temporary table is created in the tempdb and it is visible to all other sessions as well. Global temporary tables are only destroyed when the current user disconnected and all the sessions referring to it closed. Local temp tables are only accessible from their creation context, such as the connection. Global temp tables are accessible from other connection contexts. Both local and global temp tables reside in the tempdb database. 
+
+14. Under what conditions would you use a table variable instead of a local temporary table? Why would
+you refer to use a local temporary table instead of a table variable?
+Table Variable acts like a variable and exists for a particular batch of query execution. It gets dropped once it comes out of batch. It is created in the memory database but may be pushed out to tempdb. Use Table variable, if you have less than 1000 rows otherwise go for Temporary tables.
+
+15. What is a table type? What is the syntax for creating a table type? What is the syntax for using a
+table type?
+You can use a table type to preserve a table definition as an object in the database. Later you can reuse it as the table definition of table variables and input parameters of stored procedures and user-defined functions. Table types are required for table-valued parameters. 
+DROP TYPE IF EXISTS dbo.OrderTotalsByYear;CREATE TYPE dbo.OrderTotalsByYear AS TABLE(  orderyear INT NOT NULL PRIMARY KEY,  qty       INT NOT NULL);
